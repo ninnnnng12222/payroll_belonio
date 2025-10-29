@@ -1,1 +1,159 @@
-# payroll_belonio
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #c05050;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgb(255, 1, 1);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(160, 88, 88, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #462828;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+            text-align: left;
+        }
+
+        input {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #a80c19;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #payrollSummary {
+            text-align: left;
+            display: none;
+            margin-top: 20px;
+        }
+
+        #payrollSummary h2, #payrollSummary h3 {
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #payrollSummary p {
+            margin: 5px 0;
+        }
+
+        #backBtn {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Payroll Calculator</h1>
+        <form id="payrollForm">
+            <label for="employeeName">Employee Name:</label>
+            <input type="text" id="employeeName" required>
+
+            <label for="rate">Daily Rate (PHP):</label>
+            <input type="number" id="rate" step="0.01" required>
+
+            <label for="daysWorked">Days Worked:</label>
+            <input type="number" id="daysWorked" required>
+
+            <button type="submit">Calculate Payroll</button>
+        </form>
+
+        <div id="payrollSummary">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+
+        <button id="backBtn" onclick="resetForm()">Calculate Another</button>
+    </div>
+
+    <script>
+        document.getElementById('payrollForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('employeeName').value;
+            const rate = parseFloat(document.getElementById('rate').value);
+            const days = parseInt(document.getElementById('daysWorked').value);
+
+            // Computations
+            const grossPay = rate * days;
+            const sss = grossPay * 0.05;
+            const pagibig = grossPay * 0.03;
+            const philhealth = grossPay * 0.02;
+            const tax = grossPay * 0.05;
+            const totalDeduction = sss + pagibig + philhealth + tax;
+            const netPay = grossPay - totalDeduction;
+
+            // Display
+            const summary = document.getElementById('payrollSummary');
+            summary.innerHTML = `
+                <h2>Employee Details</h2>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Daily Rate:</strong> PHP ${rate.toFixed(2)}</p>
+                <p><strong>Days Worked:</strong> ${days}</p>
+                
+                <h2>Computations</h2>
+                <p><strong>Gross Pay:</strong> PHP ${grossPay.toFixed(2)}</p>
+                
+                <h3>Deductions</h3>
+                <p>SSS (5%): PHP ${sss.toFixed(2)}</p>
+                <p>Pag-ibig (3%): PHP ${pagibig.toFixed(2)}</p>
+                <p>Philhealth (2%): PHP ${philhealth.toFixed(2)}</p>
+                <p>Tax (5%): PHP ${tax.toFixed(2)}</p>
+                <p><strong>Total Deduction:</strong> PHP ${totalDeduction.toFixed(2)}</p>
+                
+                <h2>Net Pay</h2>
+                <p><strong>Net Pay:</strong> PHP ${netPay.toFixed(2)}</p>
+            `;
+
+            // Hide form and show summary
+            document.getElementById('payrollForm').style.display = 'none';
+            summary.style.display = 'block';
+            document.getElementById('backBtn').style.display = 'block';
+        });
+
+        function resetForm() {
+            document.getElementById('payrollForm').style.display = 'block';
+            document.getElementById('payrollSummary').style.display = 'none';
+            document.getElementById('backBtn').style.display = 'none';
+            document.getElementById('payrollForm').reset();
+        }
+    </script>
+</body>
+</html>
